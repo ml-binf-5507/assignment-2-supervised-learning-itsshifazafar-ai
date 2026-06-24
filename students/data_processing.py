@@ -123,7 +123,9 @@ def prepare_classification_data(df, target='num'):
     # - Exclude target from features
     # - Exclude chol from features
     # - Return X (features) and y (target)
-    pass
+    y = (df[target] > 0).astype(int)
+    X = df.drop(columns=[target, 'chol'])
+    return X, y
 
 
 def split_and_scale(X, y, test_size=0.2, random_state=42):
