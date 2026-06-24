@@ -100,7 +100,7 @@ def calculate_auprc_score(y_true, y_pred_proba):
     """
     # TODO: Implement AUPRC calculation
     # Use sklearn's average_precision_score
-    pass
+    return float(average_precision_score(y_true, y_pred_proba))
 
 
 def generate_auroc_curve(y_true, y_pred_proba, model_name="Model", 
