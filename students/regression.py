@@ -90,7 +90,31 @@ def create_r2_heatmap(results_df, l1_ratios, alphas, output_path=None):
     # - Add colorbar
     # - Save to output_path if provided
     # - Return figure object
-    pass
+    heatmap_data = results_df.pivot(
+        index='alpha', 
+        columns='l1_ratio', 
+        values='r2_score'
+    )
+    fig, ax = plt.subplots(figsize=(8, 6))
+    sns.heatmap(
+        heatmap_data, 
+        annot=True, 
+        fmt=".3f", 
+        cmap="viridis",
+        cbar_kws={'label': 'R² Score'}, 
+        ax=ax
+    )
+
+    ax.set_xlabel("L1 Ratio")
+    ax.set_ylabel("Alpha")
+    ax.set_title("ElasticNet R² Score Heatmap")
+
+    plt.tight_layout()
+
+    if output_path is not None:
+        plt.savefig(output_path, bbox_inches='tight')
+    
+    return fig
 
 
 def get_best_elasticnet_model(X_train, y_train, X_test, y_test, 
