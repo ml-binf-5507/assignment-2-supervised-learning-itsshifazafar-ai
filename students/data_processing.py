@@ -65,7 +65,15 @@ def preprocess_data(df):
     # - Handle missing values
     # - Encode categorical variables (e.g., sex, cp, fbs, etc.)
     # - Ensure all columns are numeric
-    pass
+    df = df.copy()
+    # Replace missing values represented as "?"
+    df.replace("?", np.nan, inplace=True)
+    # Convert everything to numeric
+    for col in df.columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+    # Fill missing values with median for numeric columns
+    df.fillna(df.median(), inplace=True)
+    return df
 
 
 def prepare_regression_data(df, target='chol'):
