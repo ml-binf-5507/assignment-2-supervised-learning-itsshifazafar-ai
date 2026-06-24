@@ -86,7 +86,15 @@ def train_knn_grid(X_train, y_train, param_grid=None):
     # - Use GridSearchCV with cv=5
     # - Fit on training data
     # - Return fitted GridSearchCV object
-    pass
+    model = KNeighborsClassifier()
+    grid_search = GridSearchCV(
+        estimator=model,
+        param_grid=param_grid,
+        cv=5,
+        scoring='roc_auc'
+    )
+    grid_search.fit(X_train, y_train)
+    return grid_search
 
 
 def get_best_logistic_regression(X_train, y_train, X_test, y_test, param_grid=None):
