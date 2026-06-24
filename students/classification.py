@@ -164,4 +164,11 @@ def get_best_knn(X_train, y_train, X_test, y_test, param_grid=None):
     # - Use train_knn_grid
     # - Extract best model and best_k
     # - Return dictionary
-    pass
+    grid_search = train_knn_grid(X_train, y_train, param_grid)
+    return {
+        'model': grid_search.best_estimator_,
+        'best_params': grid_search.best_params_,
+        'best_k': grid_search.best_params_['n_neighbors'],
+        'cv_results_df': pd.DataFrame(grid_search.cv_results_)
+    }
+
