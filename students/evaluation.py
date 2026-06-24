@@ -55,9 +55,9 @@ def calculate_classification_metrics(y_true, y_pred):
     # Return dictionary with all four metrics
     return {
         'accuracy': float(accuracy_score(y_true, y_pred)),
-        'precision': float(precision_score(y_true, y_pred)),
-        'recall': float(recall_score(y_true, y_pred)),
-        'f1': float(f1_score(y_true, y_pred))
+        'precision': float(precision_score(y_true, y_pred, zero_division=0)),
+        'recall': float(recall_score(y_true, y_pred, zero_division=0)),
+        'f1': float(f1_score(y_true, y_pred, zero_division=0))
     }
 
 
@@ -79,7 +79,7 @@ def calculate_auroc_score(y_true, y_pred_proba):
     """
     # TODO: Implement AUROC calculation
     # Use sklearn's roc_auc_score
-    pass
+    return float(roc_auc_score(y_true, y_pred_proba))
 
 
 def calculate_auprc_score(y_true, y_pred_proba):
