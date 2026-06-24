@@ -9,6 +9,7 @@ from sklearn.metrics import (
     roc_curve, auc, precision_recall_curve, average_precision_score,
     roc_auc_score, auc as compute_auc, r2_score
 )
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
 def calculate_r2_score(y_true, y_pred):
@@ -52,7 +53,12 @@ def calculate_classification_metrics(y_true, y_pred):
     
     # TODO: Implement metrics calculation
     # Return dictionary with all four metrics
-    pass
+    return {
+        'accuracy': float(accuracy_score(y_true, y_pred)),
+        'precision': float(precision_score(y_true, y_pred)),
+        'recall': float(recall_score(y_true, y_pred)),
+        'f1': float(f1_score(y_true, y_pred))
+    }
 
 
 def calculate_auroc_score(y_true, y_pred_proba):
