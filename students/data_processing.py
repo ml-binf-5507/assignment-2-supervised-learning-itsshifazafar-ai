@@ -38,7 +38,13 @@ def load_heart_disease_data(filepath):
     # Hint: Use pd.read_csv()
     # Hint: Check if file exists and raise helpful error if not
     # TODO: Implement data loading
-    pass
+    try:
+        df = pd.read_csv(filepath)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"File not found: {filepath}.")
+    if df.empty:
+        raise ValueError("The dataset is empty.")
+    return df
 
 
 def preprocess_data(df):
