@@ -29,7 +29,7 @@ def calculate_r2_score(y_true, y_pred):
     """
     # TODO: Implement R² calculation
     # Use sklearn's r2_score
-    pass
+    return float(r2_score(y_true, y_pred))
 
 
 def calculate_classification_metrics(y_true, y_pred):
