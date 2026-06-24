@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import ElasticNet
 from sklearn.metrics import r2_score
+from sklearn.model_selection import ParameterGrid
 
 
 def train_elasticnet_grid(X_train, y_train, l1_ratios, alphas):
@@ -38,7 +39,28 @@ def train_elasticnet_grid(X_train, y_train, l1_ratios, alphas):
     #   - Calculate R² score on training data
     #   - Store results
     # - Return DataFrame with results
-    pass
+    results = []
+    for l1_ratio in l1_ratios:
+        for alpha in alphas:
+            model = ElasticNet(
+                alpha=alpha, 
+                l1_ratio=l1_ratio, 
+                max_iter=5000,
+                random_state=42
+            )
+            model.fit(X_train, y_train)
+
+            y_pred = model.predict(X_train)
+            r2 = r2_score(y_train, y_pred)
+
+            results.append({
+                'l1_ratio': l1_ratio,
+                'alpha': alpha,
+                'r2_score': r2,
+                'model': model
+            })
+
+    return pd.DataFrame(results)
 
 
 def create_r2_heatmap(results_df, l1_ratios, alphas, output_path=None):
