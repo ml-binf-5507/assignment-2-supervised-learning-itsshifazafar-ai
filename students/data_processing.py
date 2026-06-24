@@ -159,7 +159,7 @@ def split_and_scale(X, y, test_size=0.2, random_state=42):
         y,
         test_size=test_size,
         random_state=random_state,
-        stratify=y if len(np.unique(y)) == 2 else None
+        stratify=None
     )
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
