@@ -157,4 +157,40 @@ def get_best_elasticnet_model(X_train, y_train, X_test, y_test,
     # - Train models using train_elasticnet_grid
     # - Select model with highest test R² (not training R²)
     # - Return dictionary with best model and parameters
-    pass
+    results_df = train_elasticnet_grid(X_train, y_train, l1_ratios, alphas)
+
+    best_test_r2 = -np.inf
+    best_model = None
+    best_l1_ratio = None
+    best_alpha = None
+    best_train_r2 = None
+
+    for _, row in results_df.iterrows():
+        model = ElasticNet(
+            l1_ratio=row['l1_ratio'],
+            alpha=row['alpha'],
+            max_iter=5000,
+            random_state=42
+        )
+        model.fit(X_train, y_train)
+        train_pred = model.predict(X_train)
+        test_pred = model.predict(X_test)
+        train_r2 = r2_score(y_train, train_pred)
+        test_r2 = r2_score(y_test, test_pred)
+
+        if test_r2 > best_test_r2:
+            best_test_r2 = test_r2
+            best_model = model
+            best_l1_ratio = row['l1_ratio']
+            best_alpha = row['alpha']
+            best_train_r2 = train_r2
+
+    return {
+        'model': best_model,
+        'best_l1_ratio': best_l1_ratio,
+        'best_alpha': best_alpha,
+        'train_r2': best_train_r2,
+        'test_r2': best_test_r2,
+        'results_df': results_df
+    }
+
