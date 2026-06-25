@@ -134,7 +134,24 @@ def generate_auroc_curve(y_true, y_pred_proba, model_name="Model",
     # - Set labels: "False Positive Rate", "True Positive Rate"
     # - Save to output_path if provided
     # - Return figure and/or axes
-    pass
+    fpr, tpr, _ = roc_curve(y_true, y_pred_proba)
+    roc_auc = auc(fpr, tpr)
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(6, 5))
+    else:
+        fig = ax.figure 
+    
+    ax.plot(fpr, tpr, label=f'{model_name} AUC = {roc_auc:.3f}')
+    ax.plot([0, 1], [0, 1], linestyle="--")
+    ax.set_xlabel("False Positive Rate")
+    ax.set_ylabel("True Positive Rate")
+    ax.set_title("ROC Curve")
+    ax.legend()
+    if output_path is not None:
+        fig.savefig(output_path, bbox_inches="tight")
+        
+    return fig
 
 
 def generate_auprc_curve(y_true, y_pred_proba, model_name="Model",
@@ -168,8 +185,25 @@ def generate_auprc_curve(y_true, y_pred_proba, model_name="Model",
     # - Set labels: "Recall", "Precision"
     # - Save to output_path if provided
     # - Return figure and/or axes
-    pass
+    precision, recall, _ = precision_recall_curve(y_true, y_pred_proba)
+    ap_score = average_precision_score(y_true, y_pred_proba)
+    baseline = np.mean(y_true)
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(6, 5))
+    else:
+        fig = ax.figure
 
+    ax.plot(recall, precision, label=f"{model_name} AP = {ap_score:.3f}")
+    ax.axhline(y=baseline, linestyle="--")
+    ax.set_xlabel("Recall")
+    ax.set_ylabel("Precision")
+    ax.set_title("Precision-Recall Curve")
+    ax.legend()
+    
+    if output_path is not None:
+        fig.savefig(output_path, bbox_inches="tight")
+
+    return fig
 
 def plot_comparison_curves(y_true, y_pred_proba_log, y_pred_proba_knn,
                           output_path=None):
@@ -199,4 +233,19 @@ def plot_comparison_curves(y_true, y_pred_proba_log, y_pred_proba_knn,
     # - Add legends with AUROC/AUPRC scores
     # - Save to output_path if provided
     # - Return figure
-    pass
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    generate_auroc_curve(y_true, y_pred_proba_log, model_name="Logistic Regression", ax=axes[0])
+
+    generate_auroc_curve(y_true, y_pred_proba_knn, model_name="k-NN", ax=axes[0])
+
+    generate_auprc_curve(y_true, y_pred_proba_log, model_name="Logistic Regression", ax=axes[1])
+
+    generate_auprc_curve(y_true, y_pred_proba_knn, model_name="k-NN", ax=axes[1])
+
+    plt.tight_layout()
+
+    if output_path is not None:
+        fig.savefig(output_path, bbox_inches="tight")
+
+    return fig
